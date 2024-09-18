@@ -50,6 +50,40 @@ button, [type="button"] {
     text-align: center;
 }
 
+
+#ratingBtnsDiv {
+    display: flex;
+    gap: 10px;
+    font-size: 38px;
+}
+.ratingBtn {
+    background: none;
+    background-color: #00000000;
+    border: lightgray 1px solid;
+    border-radius: 100%;
+    width: 55px;
+    height: 60px;
+    transition: background-color .2s;
+    cursor: pointer;
+}
+#ratingBtn1 {
+    --baccol: lightcoral;
+}
+#ratingBtn2 {
+    --baccol: gray;
+}
+#ratingBtn3 {
+    --baccol: lightseagreen;
+}
+.ratingBtn:hover {
+    background-color: var(--baccol);
+    filter: brightness(1.1);
+}
+.ratingBtnActive {
+    background-color: var(--baccol);
+}
+
+
 #chistNextBtn {
     padding: 5px 10px;
     border-radius: 5px;

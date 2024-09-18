@@ -1,15 +1,39 @@
 const jokeTextDiv = document.getElementById("chistContent")!;
 const nextJokeBtn = document.getElementById("chistNextBtn")!;
 
+const rateBtns = document.getElementsByClassName("ratingBtn");
+
 const urlApi = "https://icanhazdadjoke.com/";
+
+interface Joke {
+    id: string;
+    joke: string;
+}
+interface StoredJoke {
+    id: string;
+    score: number;
+    date: string;
+}
+
+const currentJoke :StoredJoke = {
+    id: "None",
+    score: 0,
+    date: ""
+};
+
+const reportJokes :StoredJoke[] = [];
 
 
 // get joke on startup
-getJoke().then((res) => {replaceJokeText(res)});
+getJokeJson().then((jokeJson) => {
+    replaceJoke(jokeJson)}
+);
 
 // get joke on button click
-nextJokeBtn.addEventListener("click", () => {    
-    getJoke().then((res) => {replaceJokeText(res)});
+nextJokeBtn.addEventListener("click", () => {
+    getJokeJson().then((jokeJson) => {
+        replaceJoke(jokeJson)
+    });
 })
 
 
@@ -17,7 +41,7 @@ nextJokeBtn.addEventListener("click", () => {
  * Sends a request for a joke, and transforms it to a simple string
  * @returns the joke
  */
-async function getJoke(): Promise<string> {
+async function getJokeJson(): Promise<Joke> {
     
     const response = await fetch(urlApi, {
         headers: {
@@ -26,11 +50,32 @@ async function getJoke(): Promise<string> {
         }
     })
 
-    if (!response.ok) return "Not found";
-    
+    if (!response.ok) return {id: "None", joke: "Not Found"};
+
     const jokeJson = await response.json();
 
-    return jokeJson.joke;
+    return jokeJson;
+
+}
+
+
+function replaceJoke(jokeJson:Joke) {
+
+    if (currentJoke.id != "None") {
+        reportJokes.push(structuredClone(currentJoke));        
+    }
+
+    currentJoke.id = jokeJson.id;
+    currentJoke.score = 0;
+    currentJoke.date = new Date().toISOString();
+
+    for (let i = 0; i < rateBtns.length; i++) {
+        rateBtns[i].classList.remove("ratingBtnActive");
+    }
+
+    console.log(reportJokes);
+
+    replaceJokeText(jokeJson.joke);
 
 }
 
@@ -41,6 +86,31 @@ async function getJoke(): Promise<string> {
 function replaceJokeText(text: string) {
     
     jokeTextDiv.innerHTML = text;
+
+}
+
+
+for (let i = 0; i < rateBtns.length; i++) {
+    rateBtns[i].addEventListener("click", () => {rateJoke(i+1)});
+}
+
+/**
+ * Gives a rating to the currently shown joke
+ * @param rating Number of rating button clicked
+ */
+function rateJoke(rating: number) {
+
+    currentJoke.score = rating;
+
+    for (let i = 0; i < rateBtns.length; i++) {
+
+        if (rating - 1 == i) {
+            rateBtns[i].classList.add("ratingBtnActive");
+        } else {
+            rateBtns[i].classList.remove("ratingBtnActive");
+        }
+
+    }
 
 }
 
