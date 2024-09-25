@@ -1,7 +1,8 @@
 const jokeTextDiv = document.getElementById("chistContent");
 const nextJokeBtn = document.getElementById("chistNextBtn");
 const rateBtns = document.getElementsByClassName("ratingBtn");
-const urlApi = "https://icanhazdadjoke.com/";
+const weatherIconEl = document.getElementById("weatherIcon");
+const weatherTextDiv = document.getElementById("weatherTextDiv");
 const currentJoke = {
     id: "None",
     score: 0,
@@ -23,6 +24,7 @@ nextJokeBtn.addEventListener("click", () => {
  * @returns the joke
  */
 async function getJokeJson() {
+    const urlApi = "https://icanhazdadjoke.com/";
     const response = await fetch(urlApi, {
         headers: {
             "Accept": "application/json",
@@ -72,4 +74,16 @@ function rateJoke(rating) {
         }
     }
 }
-// compiled with "npx tsc --target ES2023 js/script.ts"
+getWeather();
+/** Asks for weather data and updates weather DOM elements */
+async function getWeather() {
+    const loc = "Barcelona";
+    const apiKey = "ece261d5aa7c6f2a90fafbde16808b33";
+    const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${loc}&units=m`;
+    const options = { method: 'GET' };
+    const response = await fetch(url, options);
+    const result = await response.json();
+    weatherIconEl.setAttribute("src", result.current.weather_icons[0]);
+    weatherTextDiv.innerHTML = `${result.current.weather_descriptions[0]}`
+        + ` | ${result.current.temperature}ºC | ${result.location.name}`;
+}
