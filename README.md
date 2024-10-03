@@ -8,7 +8,7 @@ The project simply uses Typescript, with scripts already compiled to JS. To try 
 
 <p align="center">
 
-  <img src="https://github.com/Readek/ITA-API/blob/master/preview.png" alt="Preview">
+  <img src="https://raw.githubusercontent.com/Readek/ITA-API/refs/heads/main/preview.png" alt="Preview">
   
 </p>
 
