@@ -15,5 +15,7 @@ The project simply uses Typescript, with scripts already compiled to JS. To try 
 ### APIs used
 
 [Joke API](https://icanhazdadjoke.com/) - Dad jokes
+
 [Joke API](https://jokeapi.dev/) - General jokes
+
 [Weather API](https://weatherstack.com/)
